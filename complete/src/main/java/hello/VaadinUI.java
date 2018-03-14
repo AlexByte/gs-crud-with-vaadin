@@ -1,7 +1,10 @@
 package hello;
 
+import com.vaadin.data.Binder;
+import com.vaadin.ui.renderers.TextRenderer;
 import org.springframework.util.StringUtils;
 
+import org.vaadin.patrik.FastNavigation;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.ValueChangeMode;
@@ -29,20 +32,38 @@ public class VaadinUI extends UI {
 	public VaadinUI(CustomerRepository repo, CustomerEditor editor) {
 		this.repo = repo;
 		this.editor = editor;
-		this.grid = new Grid<>(Customer.class);
+		this.grid = new Grid<>();
 		this.filter = new TextField();
 		this.addNewBtn = new Button("New customer", FontAwesome.PLUS);
 	}
 
 	@Override
 	protected void init(VaadinRequest request) {
+		grid.getEditor().setEnabled(true);
+		new FastNavigation(grid);
+
+		Binder<Customer> binder = grid.getEditor().getBinder();
+		grid.addColumn(Customer::getFirstName,
+				new TextRenderer()).setEditorBinding(binder
+				.forField(new TextField())
+				.bind(Customer::getFirstName, Customer::setFirstName)
+		);
+
+		grid.addColumn(Customer::getLastName,
+				new TextRenderer()).setEditorBinding(binder
+				.forField(new TextField())
+				.bind(Customer::getLastName, Customer::setLastName)
+		);
+
+
+
 		// build layout
 		HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
 		VerticalLayout mainLayout = new VerticalLayout(actions, grid, editor);
 		setContent(mainLayout);
 
 		grid.setHeight(300, Unit.PIXELS);
-		grid.setColumns("id", "firstName", "lastName");
+		//grid.setColumns("id", "firstName", "lastName");
 
 		filter.setPlaceholder("Filter by last name");
 
