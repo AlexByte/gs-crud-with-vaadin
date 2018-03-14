@@ -1,26 +1,24 @@
 package hello;
 
+import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.Binder;
-import com.vaadin.ui.renderers.TextRenderer;
-import org.springframework.util.StringUtils;
-
-import org.vaadin.patrik.FastNavigation;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.shared.ui.ValueChangeMode;
-import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.Button;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.renderers.TextRenderer;
+import org.vaadin.patrik.FastNavigation;
 
+import javax.servlet.annotation.WebServlet;
 import java.util.ArrayList;
 
-@SpringUI
 public class VaadinUI extends UI {
 
+    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
+    @VaadinServletConfiguration(ui = VaadinUI.class, productionMode = false)
+    public static class MyUIServlet extends VaadinServlet {
+    }
 
     final Grid<Customer> grid;
 
