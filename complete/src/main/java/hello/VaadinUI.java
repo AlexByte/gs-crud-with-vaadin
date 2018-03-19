@@ -31,7 +31,11 @@ public class VaadinUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         grid.getEditor().setEnabled(true);
-        new FastNavigation(grid);
+        FastNavigation fastNavigation = new FastNavigation(grid);
+        fastNavigation.addClickOutListener(clickOutEvent -> {
+            int a = 5;
+            grid.setEnabled(false);
+        });
 
         Binder<Customer> binder = grid.getEditor().getBinder();
         grid.addColumn(Customer::getFirstName,
